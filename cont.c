@@ -38,6 +38,8 @@
 #define FIBER_USE_NATIVE 0
 #endif
 
+#define FIBER_STACK_SIZE_MULTIPLIER 4
+
 #if FIBER_USE_NATIVE
 #ifndef _WIN32
 #include <unistd.h>
@@ -47,7 +49,8 @@
 #define RB_PAGE_SIZE (pagesize)
 #define RB_PAGE_MASK (~(RB_PAGE_SIZE - 1))
 static long pagesize;
-#define FIBER_MACHINE_STACK_ALLOCATION_SIZE  (0x10000)
+
+#define FIBER_MACHINE_STACK_ALLOCATION_SIZE  (0x10000) * FIBER_STACK_SIZE_MULTIPLIER
 #endif
 
 #define CAPTURE_JUST_VALID_VM_STACK 1
@@ -999,7 +1002,7 @@ rb_cont_call(int argc, VALUE *argv, VALUE contval)
  *
  */
 
-#define FIBER_VM_STACK_SIZE (4 * 1024)
+#define FIBER_VM_STACK_SIZE ((4 * 1024) * FIBER_STACK_SIZE_MULTIPLIER)
 
 static const rb_data_type_t fiber_data_type = {
     "fiber",
